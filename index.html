@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gift of Love for Ameli</title>
+    <style>
+        /* General Styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background: radial-gradient(circle, #001d3d, #000428);
+            font-family: 'Arial', sans-serif;
+        }
+
+        #sky {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Heart Styling */
+        .heart-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .heart {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            transform: rotate(-45deg);
+            margin: auto;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -75px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 75px;
+        }
+
+        /* Animation */
+        .heart.open {
+            animation: heartOpen 1s ease forwards;
+        }
+
+        @keyframes heartOpen {
+            0% { transform: rotate(-45deg); }
+            100% { transform: rotate(-45deg) scale(10); opacity: 0; }
+        }
+
+        /* Message Styling */
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2em;
+            color: white;
+            text-align: center;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        #message span {
+            display: block;
+            font-size: 1.2em;
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* Fade-In Animation */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="sky"></canvas>
+
+    <div class="heart-container" onclick="openHeart()">
+        <div class="heart"></div>
+    </div>
+
+    <div id="message">
+        <p>I love you, my little angel Ameli ❤️</p>
+        <span>- Your Starry Night</span>
+    </div>
+
+    <script>
+        // Canvas: Starry Sky
+        const canvas = document.getElementById('sky');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = [];
+        const starCount = 150;
+
+        // Generate stars
+        function createStars() {
+            for (let i = 0; i < starCount; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 2,
+                    alpha: Math.random(),
+                    speed: Math.random() * 0.02,
+                });
+            }
+        }
+
+        // Draw stars
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+            });
+        }
+
+        // Animate stars
+        function animateStars() {
+            stars.forEach(star => {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) {
+                    star.speed *= -1;
+                }
+            });
+            drawStars();
+            requestAnimationFrame(animateStars);
+        }
+
+        createStars();
+        animateStars();
+
+        // Heart Animation
+        function openHeart() {
+            const heart = document.querySelector('.heart');
+            const message = document.getElementById('message');
+            heart.classList.add('open');
+            setTimeout(() => {
+                message.style.opacity = 1;
+                message.style.animation = 'fadeIn 2s ease forwards';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
